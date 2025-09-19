@@ -19,11 +19,11 @@ public class Father extends Bot {
     @Override
     public void run() {
         // Set colors
-        setBodyColor(Color.BLACK);
-        setTurretColor(Color.BLACK);
-        setRadarColor(Color.ORANGE);
-        setBulletColor(Color.CYAN);
-        setScanColor(Color.CYAN);
+        setBodyColor(Color.WHITE);
+        setTurretColor(Color.WHITE);
+        setRadarColor(Color.WHITE);
+        setBulletColor(Color.WHITE);
+        setScanColor(Color.WHITE);
 
         // Initialize moveAmount to the maximum possible for the arena
         moveAmount = Math.max(getArenaWidth(), getArenaHeight());
@@ -37,8 +37,8 @@ public class Father extends Bot {
 
         // Turn the gun to turn right 90 degrees.
         peek = true;
-        turnGunLeft(90);
-        turnLeft(90);
+        turnGunRight(90);
+        turnRight(90);
 
         // Main loop
         while (isRunning()) {
@@ -49,7 +49,7 @@ public class Father extends Bot {
             // Don't peek now
             peek = false;
             // Turn to the next wall
-            turnLeft(90);
+            turnRight(90);
         }
     }
 
