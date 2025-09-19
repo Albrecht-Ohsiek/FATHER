@@ -1,0 +1,14 @@
+{
+  "name": "FATHER",
+  "version": "1.0",
+  "authors": [
+    "Albrecht Ohsiek"
+  ],
+  "description": "Tets BOT",
+  "homepage": "",
+  "countryCodes": [
+    "de"
+  ],
+  "platform": "JVM",
+  "programmingLang": "Java 11"
+}
