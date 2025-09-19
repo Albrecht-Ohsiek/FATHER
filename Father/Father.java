@@ -5,11 +5,6 @@ import dev.robocode.tankroyale.botapi.graphics.Color;
 // ------------------------------------------------------------------
 // Father
 // ------------------------------------------------------------------
-// A sample bot original made for Robocode by Mathew Nelson.
-//
-// This robot navigates around the perimeter of the battlefield with
-// the gun pointed inward.
-// ------------------------------------------------------------------
 public class Father extends Bot {
 
     boolean peek; // Don't turn if there's a bot there
