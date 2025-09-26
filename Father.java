@@ -12,7 +12,7 @@ public class Father extends Bot {
     private final Color PRIMARY_COLOR = Color.WHITE;
     private final Color SECONDARY_COLOR = Color.BLACK;
 
-    private final int HISTORY_SIZE = 5;
+    private final int HISTORY_SIZE = 2;
     private final Map<Integer, Deque<Point>> enemyPositions = new HashMap<>();
 
     public static void main(String[] args) {
@@ -24,26 +24,20 @@ public class Father extends Bot {
         setColors();
 
         while (isRunning()) {
-            spinStrategy();
+            setTurnRight(10_000);
+            setMaxSpeed(5);
+            forward(10_000);
         }
     }
 
-    // Spin and move with full speed
-    private void spinStrategy() {
-        setTurnRight(10_000);
-        setMaxSpeed(5);
-        forward(10_000);
-    }
-
-    // YOU HIT ME, YOU DIE NOW!
     @Override
     public void onHitBot(HitBotEvent e) {
-        turnToFaceTarget(e.getX(), e.getY());
-
-        double distance = distanceTo(e.getX(), e.getY());
-        smartFire(distance);
-
-        if (e.isRammed()){
+        double direction = directionTo(e.getX(), e.getY());
+        double bearing = calcBearing(direction);
+        if (bearing > -10 && bearing < 10) {
+            fire(3);
+        }
+        if (e.isRammed()) {
             turnRight(10);
         }
     }
@@ -52,13 +46,15 @@ public class Father extends Bot {
     public void onScannedBot(ScannedBotEvent e) {
         updateEnemyPosition(e);
         
-        // Should still get a count of all stationary bots so ignores eratic bots until no more stationary bots
-        double distance = distanceTo(e.getX(), e.getY());
-        if (isStationary(enemyPositions.get(e.getScannedBotId()))) {
-            turnToFaceTarget(e.getX(), e.getY());
+        int botId = e.getScannedBotId();
+        List<Integer> stationaryBots = getStationaryBots();
+
+        if (stationaryBots.isEmpty()) {
             fire(3);
         } else {
-            smartFire(distance);
+            if (stationaryBots.contains(botId)) {
+                fire(3);
+            }
         }
     }
 
@@ -70,21 +66,6 @@ public class Father extends Bot {
         setRadarColor(PRIMARY_COLOR);
         setBulletColor(PRIMARY_COLOR);
         setScanColor(PRIMARY_COLOR);
-    }
-
-    private void smartFire(double distance) {
-        if (getEnergy() < 20 || distance > 200) {
-            fire(1);
-        } else if (distance > 50) {
-            fire(2);
-        } else {
-            fire(3);
-        }
-    }
-
-    private void turnToFaceTarget(double x, double y) {
-        double bearing = bearingTo(x, y);
-        turnRight(bearing);
     }
 
     private void updateEnemyPosition(ScannedBotEvent e) {
@@ -107,5 +88,15 @@ public class Father extends Bot {
         boolean stationary = positions.stream().allMatch(p -> p.equals(first));
 
         return stationary;
+    }
+
+    private List<Integer> getStationaryBots() {
+        List<Integer> stationaryBots = new ArrayList<>();
+        for (var entry : enemyPositions.entrySet()) {
+            if (isStationary(entry.getValue())) {
+                stationaryBots.add(entry.getKey());
+            }
+        }
+        return stationaryBots;
     }
 }
