@@ -1,0 +1,14 @@
+{
+  "name": "Father",
+  "version": "2.0",
+  "authors": [
+    "Albrecht Ohsiek"
+  ],
+  "description": "",
+  "homepage": "",
+  "countryCodes": [
+    "en"
+  ],
+  "platform": "JVM",
+  "programmingLang": "Java 11"
+}
